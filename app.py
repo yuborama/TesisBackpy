@@ -29,7 +29,7 @@ def calculateminutes(list):
 app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
-def ping():
+def home():
     return {'message':'willy puto'}
 
 @app.route('/ping', methods=['GET'])
@@ -45,7 +45,7 @@ def ping():
     return jsonify({'message':'please all data'})
 
 @app.route('/pong', methods=['GET'])
-def ping():
+def house():
     return jsonify({'message':'ping'})
 
 
