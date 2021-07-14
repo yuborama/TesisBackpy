@@ -1,8 +1,9 @@
 # importaciones
 from flask import Flask, jsonify, request
 import pandas as pd
-import matplotlib.pyplot as plt
 from datetime import datetime
+
+app = Flask(__name__)
 
 def convertStrToDate(date):
     if(type(date)==datetime):
@@ -26,14 +27,16 @@ def calculateminutes(list):
     return pd.Series(l)
 
 
-app = Flask(__name__)
-
 @app.route('/', methods=['GET'])
 def home():
-    return {'message':'willy puto'}
+    return jsonify({'message':'Api init'})
 
-@app.route('/ping', methods=['GET'])
-def ping():
+@app.route('/', methods=['POST'])
+def homepost():
+    return jsonify({'message':'please send all data'})
+
+@app.route('/file', methods=['POST'])
+def recivedfile():
     file = request.files["filename"]
     if file:
         archivo = pd.read_excel(file)
@@ -43,12 +46,6 @@ def ping():
         data = fechas.loc[fechas['P/N*']=='N'].groupby('Subcódigo*').sum().reset_index().to_dict('records')
         return jsonify({'data':data})
     return jsonify({'message':'please all data'})
-
-@app.route('/pong', methods=['GET'])
-def house():
-    return jsonify({'message':'ping'})
-
-
 
 # if __name__ == '__main__':
 #     app.run(debug=True,port=4000)
