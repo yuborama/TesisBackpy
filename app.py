@@ -28,6 +28,10 @@ def calculateminutes(list):
 
 app = Flask(__name__)
 
+@app.route('/', methods=['GET'])
+def ping():
+    return {'message':'willy puto'}
+
 @app.route('/ping', methods=['GET'])
 def ping():
     file = request.files["filename"]
