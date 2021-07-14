@@ -47,7 +47,7 @@ def recivedfile():
         return jsonify({'data':data})
     return jsonify({'message':'please all data'})
 
-# if __name__ == '__main__':
-#     app.run(debug=True,port=4000)
+if __name__ == '__main__':
+    app.run(debug=True,port=4000)
 
 
