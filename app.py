@@ -1,11 +1,17 @@
 # importaciones
+print("hola1")
 from flask import Flask, jsonify, request,send_file
+print("hola2")
 from flask_cors import CORS
+print("hola3")
 import pandas as pd
+print("hola4")
 from datetime import datetime
+print("hola5")
 from io import BytesIO
+print("hola6")
 import re
-
+print("hola7")
 # from werkzeug.utils import send_file
 
 app = Flask(__name__)
@@ -20,8 +26,11 @@ def df_columns(file,columns):
     return Datos[columns]
 
 def calculate_velocity(df):
+    print("hola8")
     converter = lambda x : (pd.to_datetime(x,format='%m/%d/%Y %I:%M:%S %p',errors='ignore')) if re.findall('[AMPM]$',str(x)) else ((pd.to_datetime(x,format='%Y-%d-%m %H:%M:%S',errors='ignore')) if re.findall('-',str(x)) else (pd.to_datetime(str(x),errors='ignore')))
+    print("hola9")
     df['diferencia'] = df['Hasta*'].apply(converter)-df['Desde*'].apply(converter)
+    print("hola10")
     df['perforacion']= df['MD to (ft)']-df['MD from (ft)']
     df2 = df.loc[df['P/N*']=='P'].groupby(['Subcódigo*']).agg({'diferencia':'sum','perforacion':'sum'}).reset_index()
     df2['velocidad'] = (df2['perforacion']/(df2['diferencia'].dt.total_seconds()/3600))
