@@ -11,7 +11,10 @@ print("hola5")
 from io import BytesIO
 print("hola6")
 import re
+from xlsxwriter import Workbook
+# import pipreqs
 print("hola7")
+# print(pipreqs --print ./);
 # from werkzeug.utils import send_file
 
 app = Flask(__name__)
