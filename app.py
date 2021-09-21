@@ -18,8 +18,21 @@ def convertdatestr(x):
     y = pd.to_datetime(str(x),format='%Y-%m-%d %H:%M:%S',errors='raise')
     return y.strftime('%Y-%d-%m %H:%M:%S')
 
+def diff(vx, vy, dx, dy, dif):
+    if(vx == 0 and vy == 0):  
+        if(dx > dy):
+            return dy
+        else:
+            return dx
+    return dif
+
 converterdatastr = lambda x : pd.to_datetime(str(x),format='%Y-%m-%d %H:%M:%S',errors='ignore') 
-converter = lambda x : (pd.to_datetime(x,format='%m/%d/%Y %I:%M:%S %p',errors='ignore')) if re.findall('[AMPM]$',str(x)) else ((pd.to_datetime(x,format='%Y-%d-%m %H:%M:%S',errors='ignore')) if re.findall('-',str(x)) else (pd.to_datetime(str(x),errors='ignore')))
+converter = lambda x : ((pd.to_datetime(x,format='%m/%d/%Y %I:%M:%S %p',errors='ignore')) 
+                        if re.findall('[AMPM]$',str(x)) 
+                        else ((pd.to_datetime(x,format='%Y-%d-%m %H:%M:%S',errors='ignore')) 
+                               if re.findall('-',str(x)) 
+                               else (pd.to_datetime(str(x),errors='ignore'))
+                        ))
 # funcion devoler dataframe segun colunmas
 def df_columns(file,columns):
     Datos = pd.read_excel(file, parse_dates=False,dtype={'Hasta*':'str','Desde*':'str'})    
@@ -44,6 +57,14 @@ def mergedfs(df,df2):
     df3['velocidad'] = df3['velocidad_y'].where(cond, df3['velocidad_x'])
     df3['perforacion'] = df3['perforacion_y'].where(cond, df3['perforacion_x'])
     df3['diferencia'] = df3['diferencia_y'].where(cond, df3['diferencia_x'])
+    df3['diferencia'] = ([
+        diff(vx=df3['velocidad_x'][n], 
+             vy=df3['velocidad_y'][n],
+             dx=df3['diferencia_x'][n],
+             dy=df3['diferencia_y'][n], 
+             dif=df3['diferencia'][n])
+        for n in range(len(df3['diferencia']))
+    ])
     return df3[['Subcódigo*','perforacion','velocidad','diferencia']]
 
 def export_df(df):
