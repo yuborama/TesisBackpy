@@ -26,6 +26,7 @@ def diff(vx, vy, dx, dy, dif):
             return dx
     return dif
 
+roundnumber = lambda x: round(x, 2)
 converterdatastr = lambda x : pd.to_datetime(str(x),format='%Y-%m-%d %H:%M:%S',errors='ignore') 
 converter = lambda x : ((pd.to_datetime(x,format='%m/%d/%Y %I:%M:%S %p',errors='ignore')) 
                         if re.findall('[AMPM]$',str(x)) 
@@ -119,6 +120,7 @@ def recivedfile():
                 fechas = df_columns(file,['Desde*','Hasta*','Subcódigo*','P/N*','MD from (ft)','MD to (ft)'])
                 fechas['diferencia'] = fechas['Hasta*'].apply(converter)-fechas['Desde*'].apply(converter)
                 fechas['hours']= fechas['diferencia'].dt.total_seconds()/3600
+                fechas['hours'] =fechas['hours'].apply(roundnumber)
                 data = fechas.loc[fechas['P/N*']=='P',['Subcódigo*','hours']].groupby('Subcódigo*').sum().reset_index().to_dict('records')
                 dicty ={'File':file.filename,"datos":data}
                 datalist.append(dicty)
